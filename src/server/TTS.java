@@ -1,4 +1,7 @@
 package server;
+
+import java.io.FileInputStream;
+
 public interface TTS extends java.rmi.Remote{
-	void speak(String text) throws java.rmi.RemoteException;
+	FileInputStream speak(String text) throws java.rmi.RemoteException;
 }

@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -39,23 +40,19 @@ class TTSCliente extends JFrame{
         public void actionPerformed(ActionEvent e) {
             try {
                 TTS tts = (TTS) Naming.lookup("//localhost/TTSService");
-                FileInputStream fis =  tts.speak(entrada.getText());
-                AudioInputStream as = AudioSystem.getAudioInputStream(fis);
-                Clip clip = AudioSystem.getClip();
-                clip.open(as);
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
-                clip.start();
+                byte[] arq =  tts.speak(entrada.getText());
+                FileOutputStream fos = new FileOutputStream("ficheiro.wav");
+                fos.write(arq);
+                fos.close();
             }
             catch ( MalformedURLException murle ) {
                 System.out.println( );
                 System.out.println( "MalformedURLException" );
                 System.out.println( murle );
             }catch(RemoteException ex){
-                System.out.println( "RemoteException" );
+                System.out.println( "RemoteException. Causa: "+ex.getCause() );
             }catch(NotBoundException nbe){
                 System.out.println( "NotBoundException" );
-            }catch(UnsupportedAudioFileException ex){
-                System.out.println( "UnsupportedAudioException" );
             }catch(IOException ex){
                 System.out.println( "IOException" );
             }catch(Exception ex){

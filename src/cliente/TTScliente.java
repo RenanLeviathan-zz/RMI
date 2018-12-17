@@ -5,11 +5,14 @@ import sun.audio.AudioStream;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.net.MalformedURLException;
@@ -44,6 +47,7 @@ class TTSCliente extends JFrame{
                 FileOutputStream fos = new FileOutputStream("ficheiro.wav");
                 fos.write(arq);
                 fos.close();
+                play("ficheiro");
             }
             catch ( MalformedURLException murle ) {
                 System.out.println( );
@@ -56,8 +60,13 @@ class TTSCliente extends JFrame{
             }catch(IOException ex){
                 System.out.println( "IOException" );
             }catch(Exception ex){
-                System.out.println( "Exception" );
+                System.out.println( "Exception, causa:"+ex.getMessage());
             }
+        }
+        void play(String res){
+            URL url = TTSCliente.class.getResource(res+".wav");
+            AudioClip ac = Applet.newAudioClip(url);
+            ac.play();
         }
     }
 public static void main( String[] args ) {
